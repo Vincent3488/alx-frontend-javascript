@@ -1,20 +1,15 @@
-// 10-car.js
-class Car {
+export default class Car {
   constructor(brand, motor, color) {
     this._brand = brand;
     this._motor = motor;
     this._color = color;
   }
 
-  cloneCar() {
-    const ClonedCar = this.constructor[Symbol.species] || this.constructor;
-    return new ClonedCar();
+  static get [Symbol.species]() {
+    return this.prototype.constructor;
   }
 
-  static get [Symbol.species]() {
-    return this;
+  cloneCar() {
+    return new (this.constructor[Symbol.species])();
   }
 }
-
-export default Car;
-

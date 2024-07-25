@@ -1,24 +1,22 @@
 export default class Building {
   constructor(sqft) {
-    this.sqft = sqft;
-    if (new.target === Building) {
-      throw new TypeError('Cannot construct Building instances directly');
+    if (this.constructor !== Building) {
+      const props = Object.getOwnPropertyNames(this.constructor.prototype);
+      if (!props.find((e) => e === 'evacuationWarningMessage')) {
+        throw new Error('Class extending Building must override evacuationWarningMessage');
+      }
     }
+    this._sqft = sqft;
   }
 
   get sqft() {
     return this._sqft;
   }
 
-  set sqft(value) {
-    if (typeof value !== 'number') {
-      throw new TypeError('Square footage must be a number');
+  set sqft(sqft) {
+    if ((typeof sqft !== 'number') && (sqft instanceof Number)) {
+      throw new TypeError('Sqft must be a number');
     }
-    this._sqft = value;
-  }
-
-  evacuationWarningMessage() {
-    throw new Error('Class extending Building must override evacuationWarningMessage');
+    this._sqft = sqft;
   }
 }
-
